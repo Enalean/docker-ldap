@@ -1,0 +1,13 @@
+dn: dc=tuleap,dc=local
+objectClass: dcObject
+objectClass: organization
+dc: tuleap
+o : tuleap
+
+dn: ou=people,dc=tuleap,dc=local
+objectClass: organizationalUnit
+ou: people
+
+dn: ou=groups,dc=tuleap,dc=local
+objectClass: organizationalUnit
+ou: groups

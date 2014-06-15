@@ -1,0 +1,6 @@
+dn: cn=Bob Jones,ou=people,dc=tuleap,dc=local
+cn: Bob Jones
+sn: Jones
+objectClass: inetOrgPerson
+userPassword: p@ssw0rd
+uid: bjones
