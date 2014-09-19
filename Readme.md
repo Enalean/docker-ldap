@@ -11,6 +11,8 @@ Basically just bind a port to your host
     docker run -p 389:389 enalean/ldap-dev
 
 Then you should be able to issue some ldap command from your host (you might need to install some ldap client tools):
+    
+    $> cd docker-ldap-dev
 
     $> ldapadd -f bob.ldif -x -D 'cn=Manager,dc=tuleap,dc=local' -w welcome0
     adding new entry "cn=Bob Jones,ou=people,dc=tuleap,dc=local"
@@ -25,6 +27,6 @@ Then you should be able to issue some ldap command from your host (you might nee
 Data persistence
 ================
 
-There is a volume for /data:
+To keep your data between reboots of your LDAP server, there is a volume for /data:
 
     docker run -p 389:389 -d /srv/docker/ldap:/data enalean/ldap-dev
