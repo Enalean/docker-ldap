@@ -29,4 +29,4 @@ Data persistence
 
 To keep your data between reboots of your LDAP server, there is a volume for /data:
 
-    docker run -p 389:389 -d /srv/docker/ldap:/data enalean/ldap-dev
+    docker run -p 389:389 -dv /srv/docker/ldap:/data enalean/ldap-dev
