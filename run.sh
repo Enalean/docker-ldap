@@ -8,4 +8,4 @@ fi
 
 ln -s /data/ldap /var/lib/ldap
 
-exec /usr/bin/supervisord -n
+exec /usr/sbin/slapd -u ldap -d 3
