@@ -8,4 +8,4 @@ fi
 
 ln -s /data/ldap /var/lib/ldap
 
-exec /usr/sbin/slapd -u ldap -d 3
+exec /usr/sbin/slapd -u ldap -d $DEBUG_LEVEL
