@@ -33,7 +33,13 @@ COPY . /root
 #    sleep 3 && \
 #    ldapadd -f /root/base.ldif -D cn=Manager,dc=tuleap,dc=local -w welcome0
 
-RUN service slapd start && sleep 3 && ldapmodify -Y EXTERNAL -H ldapi:/// -f /root/manager.ldif && ldapadd -f /root/base.ldif -D cn=Manager,dc=tuleap,dc=local -w welcome0
+RUN service slapd start && \
+    sleep 3 && \
+    ldapmodify -Y EXTERNAL -H ldapi:/// -f /root/manager.ldif && \
+    ldapmodify -Y EXTERNAL -H ldapi:/// -f /root/domain.ldif && \
+    ldapadd -x -D cn=Manager,dc=tuleap,dc=local -w welcome0 -f /root/base.ldif 
+
+#&& ldapadd -f /root/base.ldif -D cn=Manager,dc=tuleap,dc=local -w welcome0
 
 
 CMD ["/root/run.sh"]

@@ -1,8 +1,14 @@
 dn: dc=tuleap,dc=local
+objectClass: top
 objectClass: dcObject
 objectClass: organization
 dc: tuleap
 o : tuleap
+
+dn: cn=Manager,dc=tuleap,dc=local
+objectClass: organizationalRole
+cn: Manager
+description: Directory Manager
 
 dn: ou=people,dc=tuleap,dc=local
 objectClass: organizationalUnit
