@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 if [ ! -d /data/ldap ]; then
     mv /var/lib/ldap /data
 else 
@@ -8,4 +10,4 @@ fi
 
 ln -s /data/ldap /var/lib/ldap
 
-exec /usr/sbin/slapd -u ldap -d $DEBUG_LEVEL
+exec /usr/sbin/slapd -h ldap:/// ldaps:/// ldapi:/// -u ldap -d $DEBUG_LEVEL

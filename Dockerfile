@@ -9,7 +9,7 @@ MAINTAINER Manuel Vacelet, manuel.vacelet@enalean.com
 
 # See possible debug levels in man page (loglevel): http://linux.die.net/man/5/slapd.conf
 ENV DEBUG_LEVEL=256
-EXPOSE 389
+EXPOSE 389 636
 VOLUME [ "/data" ]
 
 # Update to last version
@@ -25,7 +25,10 @@ COPY . /root
 # Manager password is welcome1
 # Generated with slappasswd 
 
-RUN service slapd start && \
+# Config from http://www.server-world.info/en/note?os=CentOS_6&p=ldap
+RUN cp /usr/share/openldap-servers/DB_CONFIG.example /var/lib/ldap/DB_CONFIG && \
+    chown ldap. /var/lib/ldap/DB_CONFIG && \
+    service slapd start && \
     sleep 3 && \
     ldapmodify -Y EXTERNAL -H ldapi:/// -f /root/manager.ldif && \
     ldapmodify -Y EXTERNAL -H ldapi:/// -f /root/domain.ldif && \

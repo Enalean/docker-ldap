@@ -1,7 +1,7 @@
 Dockerfile to have an LDAP server for development
 =================================================
 
-Inspired from a [Centos 6 LDAP tutorial](http://docs.adaptivecomputing.com/viewpoint/hpc/Content/topics/1-setup/installSetup/settingUpOpenLDAPOnCentos6.htm)
+Inspired from a [Centos 6 LDAP tutorial](http://www.server-world.info/en/note?os=CentOS_6&p=ldap) and [SSL tutorial](http://www.server-world.info/en/note?os=CentOS_6&p=ldap&f=3)
 
 How to use it
 =============
@@ -29,9 +29,20 @@ Data persistence
 
 To keep your data between reboots of your LDAP server, there is a volume for /data:
 
-    docker run -p 389:389 -dv /srv/docker/ldap:/data enalean/ldap-dev
+    $> docker run --name=ldap-data -v /
+
+    docker run -p 389:389 -v /srv/docker/ldap:/data enalean/ldap-dev
 
 SSL
 ===
 
-openssl genrsa -out rootCA.key 2048
+cd /etc/pki/tls/certs
+make server.key
+openssl rsa -in server.key -out server.key
+make server.csr
+openssl x509 -in server.csr -out server.crt -req -signkey server.key -days 3650
+
+cp /etc/pki/tls/certs/server.key /etc/pki/tls/certs/server.crt /etc/pki/tls/certs/ca-bundle.crt /etc/openldap/certs/
+chown ldap. /etc/openldap/certs/server.key /etc/openldap/certs/server.crt /etc/openldap/certs/ca-bundle.crt
+
+ldapmodify -Y EXTERNAL -H ldapi:/// -f ssl.ldif
