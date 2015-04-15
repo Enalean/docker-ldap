@@ -43,22 +43,21 @@ Then, just regular run:
 SSL
 ===
 
-docker run -ti --volumes-from ldap-data enalean/ldap bash
-./root/run.sh &
+Setup ldaps://
 
-cd /etc/pki/tls/certs
-make server.key
-openssl rsa -in server.key -out server.key
-make server.csr
-openssl x509 -in server.csr -out server.crt -req -signkey server.key -days 3650
+    $> docker run -ti --volumes-from ldap-data enalean/ldap bash
+    [root@4e32b42bb0c2] ./root/run.sh &
+    [root@4e32b42bb0c2] cd /etc/pki/tls/certs
+    [root@4e32b42bb0c2] make server.key
+    [root@4e32b42bb0c2] openssl rsa -in server.key -out server.key
+    [root@4e32b42bb0c2] make server.csr
+    [root@4e32b42bb0c2] openssl x509 -in server.csr -out server.crt -req -signkey server.key -days 3650
+    [root@4e32b42bb0c2] cp /etc/pki/tls/certs/server.key /etc/pki/tls/certs/server.crt /etc/pki/tls/certs/ca-bundle.crt /etc/openldap/certs/
+    [root@4e32b42bb0c2] chown ldap. /etc/openldap/certs/server.key /etc/openldap/certs/server.crt /etc/openldap/certs/ca-bundle.crt
+    [root@4e32b42bb0c2] ldapmodify -Y EXTERNAL -H ldapi:/// -f /root/ssl.ldif
+    [root@4e32b42bb0c2] pkill -INT slapd
 
-cp /etc/pki/tls/certs/server.key /etc/pki/tls/certs/server.crt /etc/pki/tls/certs/ca-bundle.crt /etc/openldap/certs/
-chown ldap. /etc/openldap/certs/server.key /etc/openldap/certs/server.crt /etc/openldap/certs/ca-bundle.crt
-
-ldapmodify -Y EXTERNAL -H ldapi:/// -f /root/ssl.ldif
-
-pkill -INT slapd
-
+Exit and start again
 
 References and links
 ====================

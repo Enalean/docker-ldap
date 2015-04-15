@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -ex
+set -e
 
 if [ ! -f /data/lib/ldap/DB_CONFIG ]; then
     if [ -z "$LDAP_ROOT_PASSWORD" -o -z "$LDAP_MANAGER_PASSWORD" ]; then
