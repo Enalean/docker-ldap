@@ -45,7 +45,7 @@ SSL
 
 Setup ldaps://
 
-    $> docker run -ti --volumes-from ldap-data enalean/ldap bash
+    $> docker run -ti --rm --volumes-from ldap-data enalean/ldap bash
     [root@4e32b42bb0c2] ./root/run.sh &
     [root@4e32b42bb0c2] cd /etc/pki/tls/certs
     [root@4e32b42bb0c2] make server.key
@@ -56,8 +56,11 @@ Setup ldaps://
     [root@4e32b42bb0c2] chown ldap. /etc/openldap/certs/server.key /etc/openldap/certs/server.crt /etc/openldap/certs/ca-bundle.crt
     [root@4e32b42bb0c2] ldapmodify -Y EXTERNAL -H ldapi:/// -f /root/ssl.ldif
     [root@4e32b42bb0c2] pkill -INT slapd
+    [root@4e32b42bb0c2] exit
 
-Exit and start again
+Then you can restart your server
+
+Note, you might need to add TLS_REQCERT allow in client's /etc/openldap/ldap.conf
 
 References and links
 ====================
