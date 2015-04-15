@@ -38,10 +38,13 @@ To keep your data between reboots of your LDAP server, there is a volume for /da
 
 Then, just regular run:
 
-    $> docker run -d --volumes-from ldap-data enalean/ldap
+    $> docker run --volumes-from ldap-data enalean/ldap
 
 SSL
 ===
+
+docker run -ti --volumes-from ldap-data enalean/ldap bash
+./root/run.sh &
 
 cd /etc/pki/tls/certs
 make server.key
@@ -52,4 +55,14 @@ openssl x509 -in server.csr -out server.crt -req -signkey server.key -days 3650
 cp /etc/pki/tls/certs/server.key /etc/pki/tls/certs/server.crt /etc/pki/tls/certs/ca-bundle.crt /etc/openldap/certs/
 chown ldap. /etc/openldap/certs/server.key /etc/openldap/certs/server.crt /etc/openldap/certs/ca-bundle.crt
 
-ldapmodify -Y EXTERNAL -H ldapi:/// -f ssl.ldif
+ldapmodify -Y EXTERNAL -H ldapi:/// -f /root/ssl.ldif
+
+pkill -INT slapd
+
+
+References and links
+====================
+
+* http://www.bradchen.com/blog/2012/08/openldap-tls-issue
+* http://www.server-world.info/en/note?os=CentOS_6&p=ldap&f=3
+* http://www.server-world.info/en/note?os=CentOS_6&p=ldap
