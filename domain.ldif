@@ -17,4 +17,4 @@ olcRootDN: cn=Manager,dc=tuleap,dc=local
 dn: olcDatabase={2}bdb,cn=config
 changetype: modify
 add: olcRootPW
-olcRootPW: {SSHA}vohcDzXwT++0i9+P7nNDypp8ObLt2hS2
+olcRootPW: %LDAP_MANAGER_PASSWORD%

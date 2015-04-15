@@ -29,9 +29,16 @@ Data persistence
 
 To keep your data between reboots of your LDAP server, there is a volume for /data:
 
-    $> docker run --name=ldap-data -v /
+    $> docker run --name=ldap-data -v /data busybox true
+    $> $EDITOR .env
+    LDAP_ROOT_PASSWORD=you very secure password for root
+    LDAP_MANAGER_PASSWORD=as secure but for manager
+    $> docker run --rm --volumes-from ldap-data --env-file=.env enalean/ldap
+    $> rm .env
 
-    docker run -p 389:389 -v /srv/docker/ldap:/data enalean/ldap-dev
+Then, just regular run:
+
+    $> docker run -d --volumes-from ldap-data enalean/ldap
 
 SSL
 ===

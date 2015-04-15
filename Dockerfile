@@ -20,18 +20,4 @@ RUN yum -y update && \
 
 COPY . /root
 
-# Default passwords are welcome0
-# RootDnpassword is welcome0
-# Manager password is welcome1
-# Generated with slappasswd 
-
-# Config from http://www.server-world.info/en/note?os=CentOS_6&p=ldap
-RUN cp /usr/share/openldap-servers/DB_CONFIG.example /var/lib/ldap/DB_CONFIG && \
-    chown ldap. /var/lib/ldap/DB_CONFIG && \
-    service slapd start && \
-    sleep 3 && \
-    ldapmodify -Y EXTERNAL -H ldapi:/// -f /root/manager.ldif && \
-    ldapmodify -Y EXTERNAL -H ldapi:/// -f /root/domain.ldif && \
-    ldapadd -x -D cn=Manager,dc=tuleap,dc=local -w welcome1 -f /root/base.ldif
-
 CMD ["/root/run.sh"]
