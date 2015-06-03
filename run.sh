@@ -31,8 +31,6 @@ if [ ! -f /data/lib/ldap/DB_CONFIG ]; then
     mkdir /data/lib /data/etc
     cp -ar /var/lib/ldap /data/lib
     cp -ar /etc/openldap /data/etc
-
-    exit
 fi
 
 rm -rf /var/lib/ldap && ln -s /data/lib/ldap /var/lib/ldap
