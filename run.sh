@@ -2,6 +2,11 @@
 
 set -e
 
+# Changing the open file descriptors limit, otherwise slapd memory
+# consumption is crazy
+# https://github.com/moby/moby/issues/8231
+ulimit -n 1024
+
 if [ ! -f /data/lib/ldap/DB_CONFIG ]; then
     if [ -z "$LDAP_ROOT_PASSWORD" -o -z "$LDAP_MANAGER_PASSWORD" ]; then
 	echo "Need LDAP_ROOT_PASSWORD and LDAP_MANAGER_PASSWORD"
