@@ -41,4 +41,10 @@ fi
 rm -rf /var/lib/ldap && ln -s /data/lib/ldap /var/lib/ldap
 rm -rf /etc/openldap && ln -s /data/etc/openldap /etc/openldap
 
+pushd /var/lib/ldap
+db_recover -v -h .
+db_upgrade -v -h . *.bdb
+db_checkpoint -v -h . -1
+chown -R ldap: .
+popd
 exec /usr/sbin/slapd -h "ldap:/// ldaps:/// ldapi:///" -u ldap -d $DEBUG_LEVEL

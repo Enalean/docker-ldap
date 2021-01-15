@@ -2,7 +2,7 @@
 # None of the following is meant for production, esp. from a security pov #
 
 ## Use the official docker centos distribution ##
-FROM centos:centos6
+FROM centos:7
 
 ## Get some karma ##
 MAINTAINER Manuel Vacelet, manuel.vacelet@enalean.com
@@ -14,8 +14,7 @@ VOLUME [ "/data" ]
 
 # Update to last version
 
-RUN yum -y update && \
-    yum -y install openldap-servers openldap-clients && \
+RUN yum -y install openldap-servers openldap-clients && \
     yum clean all
 
 COPY . /root
