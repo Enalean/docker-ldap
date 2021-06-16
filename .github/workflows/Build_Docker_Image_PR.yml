@@ -1,0 +1,15 @@
+name: Build Docker image
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2.3.4
+      - name: Build image
+        run: docker build -t test-build .
