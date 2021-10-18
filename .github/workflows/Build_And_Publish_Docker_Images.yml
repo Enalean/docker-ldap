@@ -17,7 +17,7 @@ jobs:
   build:
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2.3.4
+      - uses: actions/checkout@v2.3.5
       - name: Get lowercase base image name
         run: echo BASE_IMAGE_NAME="$(echo ${{ github.repository_owner }} | tr '[A-Z]' '[a-z]')" >> $GITHUB_ENV
       - name: Build image
