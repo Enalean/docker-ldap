@@ -33,4 +33,4 @@ jobs:
           VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
         run: |
           export VAULT_TOKEN=$(curl "$VAULT_ADDR"/v1/auth/approle/login --silent --fail -X POST --data '{"role_id": "${{ secrets.VAULT_ROLE_ID_SIGNING }}", "secret_id": "${{ secrets.VAULT_SECRET_ID_SIGNING }}"}' | jq -r '.auth.client_token')
-          cosign sign -key hashivault://tuleap-additional-tools-signing ghcr.io/${{ env.BASE_IMAGE_NAME }}/${{ env.IMAGE_NAME }}
+          cosign sign --yes --tlog-upload=true --key hashivault://tuleap-additional-tools-signing "$(docker inspect --format='{{index .RepoDigests 0}}' ghcr.io/${{ env.BASE_IMAGE_NAME }}/${{ env.IMAGE_NAME }})"
