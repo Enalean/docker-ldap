@@ -7,13 +7,15 @@ set -ex
 # https://github.com/moby/moby/issues/8231
 ulimit -n 1024
 
-if [ ! -f /data/lib/ldap/DB_CONFIG ]; then
+mkdir -p /data/el9/lib /data/el9/etc
+
+if [ ! -f /data/el9/lib/ldap/DB_CONFIG ]; then
     if [ -z "$LDAP_ROOT_PASSWORD" -o -z "$LDAP_MANAGER_PASSWORD" ]; then
         echo "Need LDAP_ROOT_PASSWORD and LDAP_MANAGER_PASSWORD"
         exit
     fi
 
-    cp /usr/share/openldap-servers/DB_CONFIG.example /var/lib/ldap/DB_CONFIG
+    cp /root/DB_CONFIG /var/lib/ldap/DB_CONFIG
     chown ldap. /var/lib/ldap/DB_CONFIG
 
     /usr/sbin/slapd -h "ldap:/// ldaps:/// ldapi:///" -u ldap -d $DEBUG_LEVEL &
@@ -37,17 +39,16 @@ if [ ! -f /data/lib/ldap/DB_CONFIG ]; then
     kill "$slapd_pid"
     wait "$slapd_pid"
 
-    mkdir /data/lib /data/etc
-    cp -ar /var/lib/ldap /data/lib
-    cp -ar /etc/openldap /data/etc
+    cp -ar /var/lib/ldap /data/el9/lib
+    cp -ar /etc/openldap /data/el9/etc
 fi
 
-rm -rf /var/lib/ldap && ln -s /data/lib/ldap /var/lib/ldap
-rm -rf /etc/openldap && ln -s /data/etc/openldap /etc/openldap
+rm -rf /var/lib/ldap && ln -s /data/el9/lib/ldap /var/lib/ldap
+rm -rf /etc/openldap && ln -s /data/el9/etc/openldap /etc/openldap
 
 pushd /var/lib/ldap
 db_recover -v -h .
-db_upgrade -v -h . *.bdb
+db_upgrade -v -h . *.bdb || true
 db_checkpoint -v -h . -1
 chown -R ldap: .
 popd
