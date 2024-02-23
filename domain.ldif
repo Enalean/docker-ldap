@@ -4,22 +4,22 @@ replace: olcAccess
 olcAccess: {0}to * by dn.base="gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth"
   read by dn.base="cn=Manager,dc=tuleap,dc=local" read by * none
 
-dn: olcDatabase={2}hdb,cn=config
+dn: olcDatabase={2}mdb,cn=config
 changetype: modify
 replace: olcSuffix
 olcSuffix: dc=tuleap,dc=local
 
-dn: olcDatabase={2}hdb,cn=config
+dn: olcDatabase={2}mdb,cn=config
 changetype: modify
 replace: olcRootDN
 olcRootDN: cn=Manager,dc=tuleap,dc=local
 
-dn: olcDatabase={2}hdb,cn=config
+dn: olcDatabase={2}mdb,cn=config
 changetype: modify
 add: olcRootPW
 olcRootPW: %LDAP_MANAGER_PASSWORD%
 
-dn: olcDatabase={2}hdb,cn=config
+dn: olcDatabase={2}mdb,cn=config
 add: olcAccess
 olcAccess: {0}to attrs=userPassword,shadowLastChange by
   dn="cn=Manager,dc=tuleap,dc=local" write by anonymous auth by self write by * none
