@@ -6,31 +6,32 @@ on:
       - main
   workflow_dispatch:
 
-permissions:
-  contents: read
-  packages: write
+permissions: {}
 
 env:
   IMAGE_NAME: ldap
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4.0.0
+        with:
+          persist-credentials: false
       - name: Get lowercase base image name
         run: echo BASE_IMAGE_NAME="$(echo ${{ github.repository_owner }} | tr '[A-Z]' '[a-z]')" >> $GITHUB_ENV
       - name: Build image
         run: docker build -t ghcr.io/${{ env.BASE_IMAGE_NAME }}/${{ env.IMAGE_NAME }} --label revision=${{ github.sha }} --label workflow_run_id=${{ github.run_id }} .
       - name: Install Cosign
-        uses: sigstore/cosign-installer@v3.7.0
+        uses: sigstore/cosign-installer@dc72c7d5c4d10cd6bcb8cf6e3fd625a9e5e537da # tag=v3.7.0
       - name: Log into ghcr.io
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
       - name: Publish image
         run: docker push ghcr.io/${{ env.BASE_IMAGE_NAME }}/${{ env.IMAGE_NAME }}
       - name: Sign image
-        env:
-          VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
         run: |
-          export VAULT_TOKEN=$(curl "$VAULT_ADDR"/v1/auth/approle/login --silent --fail -X POST --data '{"role_id": "${{ secrets.VAULT_ROLE_ID_SIGNING }}", "secret_id": "${{ secrets.VAULT_SECRET_ID_SIGNING }}"}' | jq -r '.auth.client_token')
-          cosign sign --yes --tlog-upload=true --key hashivault://tuleap-additional-tools-signing "$(docker inspect --format='{{index .RepoDigests 0}}' ghcr.io/${{ env.BASE_IMAGE_NAME }}/${{ env.IMAGE_NAME }})"
+          cosign sign --yes "$(docker inspect --format='{{index .RepoDigests 0}}' ghcr.io/${{ env.BASE_IMAGE_NAME }}/${{ env.IMAGE_NAME }})"
