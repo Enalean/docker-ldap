@@ -27,7 +27,7 @@ jobs:
       - name: Build image
         run: docker build -t ghcr.io/${{ env.BASE_IMAGE_NAME }}/${{ env.IMAGE_NAME }} --label revision=${{ github.sha }} --label workflow_run_id=${{ github.run_id }} .
       - name: Install Cosign
-        uses: sigstore/cosign-installer@398d4b0eeef1380460a10c8013a76f728fb906ac # tag=v3.9.1
+        uses: sigstore/cosign-installer@d58896d6a1865668819e1d91763c7751a165e159 # tag=v3.9.2
       - name: Log into ghcr.io
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
       - name: Publish image
